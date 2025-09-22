@@ -1,0 +1,212 @@
+{
+  "description": "Гибкие материалы: эластомеры, пружины, вязкоупругие вещества",
+  "version": "2.0",
+  "author": "TPS Materials Science Team",
+  "license": "CC-BY-SA",
+  "elements": {
+    "60": {
+      "id": 60,
+      "name": "Natural Rubber",
+      "symbol": "NR",
+      "color": [180, 30, 30],
+      "density": 0.92,
+      "state": "solid",
+      "update": "update_elastic_material",
+      "elasticity": {
+        "young_modulus_mpa": 0.01,
+        "shear_modulus_mpa": 0.003,
+        "bulk_modulus_mpa": 1.5,
+        "poissons_ratio": 0.49,
+        "tensile_strength_mpa": 25,
+        "elongation_at_break_percent": 700,
+        "strain_hardening": 1.3
+      },
+      "viscoelastic": true,
+      "damping_ratio": 0.05,
+      "glass_transition_temp_k": 200,
+      "melting_point_k": 300,
+      "thermal_expansion_coef": 6.5e-4,
+      "heat_conductivity": 0.16,
+      "friction": 1.1,
+      "permeability": 0.0001,
+      "degradation": {
+        "uv_sensitivity": 0.8,
+        "ozone_sensitivity": 0.9,
+        "max_temp_deg_c": 80
+      },
+      "description": "Природный каучук. Высокая эластичность, низкая теплостойкость."
+    },
+    "61": {
+      "id": 61,
+      "name": "Silicone Rubber",
+      "symbol": "PDMS",
+      "color": [220, 220, 220],
+      "density": 1.1,
+      "state": "solid",
+      "update": "update_elastic_material",
+      "elasticity": {
+        "young_modulus_mpa": 0.005,
+        "shear_modulus_mpa": 0.0017,
+        "bulk_modulus_mpa": 2.0,
+        "poissons_ratio": 0.495,
+        "tensile_strength_mpa": 10,
+        "elongation_at_break_percent": 1000
+      },
+      "viscoelastic": true,
+      "damping_ratio": 0.08,
+      "glass_transition_temp_k": 160,
+      "operating_temp_range_k": [180, 573],
+      "thermal_conductivity": 0.2,
+      "electrical_insulator": true,
+      "friction": 0.8,
+      "chemical_resistance": ["water", "acid", "base"],
+      "description": "Термостойкий силикон. Используется в экстремальных условиях."
+    },
+    "62": {
+      "id": 62,
+      "name": "Steel Spring",
+      "symbol": "Spring",
+      "color": [160, 160, 180],
+      "density": 7.8,
+      "state": "solid",
+      "update": "update_spring",
+      "elasticity": {
+        "young_modulus_mpa": 200000,
+        "shear_modulus_mpa": 80000,
+        "yield_strength_mpa": 400,
+        "tensile_strength_mpa": 500,
+        "spring_constant_n_per_m": 1000,
+        "rest_length_px": 10,
+        "hysteresis_loss_percent": 2
+      },
+      "plastic_deformation_limit_percent": 0.2,
+      "conductivity": 50,
+      "friction": 0.6,
+      "magnetic": true,
+      "description": "Стальная пружина. Сжимается и возвращается в форму. Может проводить ток."
+    },
+    "63": {
+      "id": 63,
+      "name": "Memory Shape Alloy",
+      "symbol": "NiTi",
+      "color": [200, 150, 100],
+      "density": 6.5,
+      "state": "solid",
+      "update": "update_shape_memory",
+      "transition_temp_low_k": 280,
+      "transition_temp_high_k": 330,
+      "elasticity": {
+        "young_modulus_austenite_mpa": 70000,
+        "young_modulus_martensite_mpa": 25000,
+        "superelastic_strain_percent": 8
+      },
+      "shape_recovery_rate": 0.1,
+      "conductivity": 2.5,
+      "description": "Сплав с памятью формы. При нагреве возвращается в исходную форму."
+    },
+    "64": {
+      "id": 64,
+      "name": "Viscous Gel",
+      "symbol": "Gel",
+      "color": [100, 150, 255],
+      "density": 1.05,
+      "state": "gel",
+      "update": "update_viscous_material",
+      "viscosity_poise": 1000,
+      "yield_stress_pa": 50,
+      "thixotropic": true,
+      "elasticity": {
+        "storage_modulus_pa": 1000,
+        "loss_modulus_pa": 500
+      },
+      "damping_ratio": 0.3,
+      "absorption": 0.9,
+      "description": "Неньютоновская жидкость. Течёт под нагрузкой, но сохраняет форму."
+    },
+    "65": {
+      "id": 65,
+      "name": "Foam (Polyurethane)",
+      "symbol": "PU Foam",
+      "color": [240, 240, 240],
+      "density": 0.03,
+      "state": "solid",
+      "porosity_percent": 95,
+      "elasticity": {
+        "compressive_strength_mpa": 0.3,
+        "recovery_time_seconds": 2,
+        "energy_absorption_j_per_cm3": 0.5
+      },
+      "thermal_insulation": true,
+      "thermal_conductivity": 0.02,
+      "acoustic_damping": true,
+      "flammable": 0.7,
+      "description": "Пенополиуретан. Амортизирует удары, изолирует тепло."
+    },
+    "66": {
+      "id": 66,
+      "name": "Elastic Band",
+      "symbol": "Band",
+      "color": [255, 0, 0],
+      "density": 1.1,
+      "state": "fiber",
+      "update": "update_elastic_band",
+      "tension_max_px": 50,
+      "tension_relaxation_rate": 0.01,
+      "elasticity": {
+        "young_modulus_mpa": 0.1,
+        "ultimate_tensile_strength_mpa": 30,
+        "breaking_strain_percent": 500
+      },
+      "attachment_points": 2,
+      "conductivity": 0,
+      "friction": 1.2,
+      "description": "Резинка. Растягивается между двумя точками. Натяжение создаёт силу."
+    },
+    "67": {
+      "id": 67,
+      "name": "Bendable Composite",
+      "symbol": "Composite",
+      "color": [100, 100, 100],
+      "density": 1.8,
+      "state": "solid",
+      "update": "update_composite_beam",
+      "bending_stiffness_n_m2": 50,
+      "max_deflection_mm": 100,
+      "damping_ratio": 0.03,
+      "layered_structure": true,
+      "delamination_threshold_j": 50,
+      "conductivity": 15,
+      "description": "Многослойный композит. Гнётся, но может расслоиться при перегрузке."
+    },
+    "68": {
+      "id": 68,
+      "name": "Hydraulic Piston",
+      "symbol": "Piston",
+      "color": [120, 120, 180],
+      "density": 2.5,
+      "state": "mechanical",
+      "update": "update_hydraulic_piston",
+      "stroke_length_px": 20,
+      "pressure_limit_bar": 200,
+      "fluid_type": "OIL",
+      "valve_controlled": true,
+      "force_output_n": 500,
+      "description": "Гидроцилиндр. Перемещается под давлением. Может быть управляемым."
+    },
+    "69": {
+      "id": 69,
+      "name": "Muscle Fiber",
+      "symbol": "Muscle",
+      "color": [200, 50, 50],
+      "density": 1.06,
+      "state": "biological",
+      "update": "update_muscle_fiber",
+      "contraction_force_n": 0.1,
+      "activation_energy": 50,
+      "fatigue_rate": 0.001,
+      "recovery_rate": 0.005,
+      "electrostimulated": true,
+      "description": "Биологическое мышечное волокно. Сокращается при подаче сигнала."
+    }
+  }
+}

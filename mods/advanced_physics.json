@@ -1,0 +1,330 @@
+{
+  "metadata": {
+    "title": "The Particle Simulator — Advanced Physics Module",
+    "version": "4.1",
+    "author": "TPS Physics Research Division",
+    "license": "CC-BY-SA 4.0",
+    "description": "Расширенные физические законы: гравитация, ЭМ-поля, давление, вязкость, квантовые эффекты.",
+    "reference_data": [
+      "NIST Physical Constants",
+      "Landau & Lifshitz Course of Theoretical Physics",
+      "Feynman Lectures on Physics"
+    ]
+  },
+  "fields": {
+    "gravity": {
+      "enabled": true,
+      "strength_px_per_s2": 9.8,
+      "direction": [0, 1],
+      "affects_states": ["solid", "liquid", "plasma"],
+      "description": "Гравитационное поле. Ускоряет объекты вниз."
+    },
+    "electromagnetic": {
+      "enabled": true,
+      "coulomb_constant": 8.99e9,
+      "permittivity": 8.85e-12,
+      "permeability": 1.26e-6,
+      "speed_of_light_m_s": 299792458,
+      "max_field_strength_v_m": 1e9,
+      "description": "Электрические и магнитные поля. Заряды взаимодействуют по закону Кулона."
+    },
+    "pressure": {
+      "enabled": true,
+      "base_pressure_pa": 101325,
+      "compressibility_factor": 0.000001,
+      "sound_speed_air_m_s": 343,
+      "viscosity_air_kg_ms": 0.000018,
+      "description": "Давление передаётся между ячейками. Газы сжимаются, жидкости — нет."
+    },
+    "temperature": {
+      "enabled": true,
+      "absolute_zero_k": 0,
+      "stefan_boltzmann": 5.67e-8,
+      "thermal_conductivity_air": 0.026,
+      "thermal_conductivity_water": 0.6,
+      "description": "Теплопередача через излучение, конвекцию и проводимость."
+    },
+    "quantum": {
+      "enabled": false,
+      "planck_constant_j_s": 6.626e-34,
+      "hbar": 1.054e-34,
+      "tunneling_enabled": true,
+      "wavefunction_resolution": 1,
+      "description": "Упрощённая модель квантовых эффектов (туннелирование, интерференция)."
+    }
+  },
+  "elements": {
+    "200": {
+      "id": 200,
+      "name": "Graviton Field Source",
+      "symbol": "G+",
+      "color": [100, 0, 255],
+      "state": "field",
+      "update": "update_gravity_source",
+      "gravity_strength": 50,
+      "radius_px": 20,
+      "persistent": true,
+      "description": "Создаёт локальное гравитационное поле. Притягивает все массы."
+    },
+    "201": {
+      "id": 201,
+      "name": "Negative Gravity",
+      "symbol": "G-",
+      "color": [0, 255, 255],
+      "state": "field",
+      "update": "update_anti_gravity",
+      "gravity_strength": -30,
+      "radius_px": 15,
+      "description": "Отталкивает объекты. Может создавать левитацию."
+    },
+    "202": {
+      "id": 202,
+      "name": "Electric Positive Charge",
+      "symbol": "E+",
+      "color": [255, 0, 0],
+      "state": "energy",
+      "charge_coulombs": 1.6e-19,
+      "update": "update_electric_positive",
+      "emits_field": true,
+      "mobility": 1.0,
+      "description": "Положительный заряд. Отталкивает другие E+, притягивает E-."
+    },
+    "203": {
+      "id": 203,
+      "name": "Electric Negative Charge",
+      "symbol": "E-",
+      "color": [0, 0, 255],
+      "state": "energy",
+      "charge_coulombs": -1.6e-19,
+      "update": "update_electric_negative",
+      "emits_field": true,
+      "mobility": 1.0,
+      "description": "Отрицательный заряд. Отталкивает другие E-, притягивает E+."
+    },
+    "204": {
+      "id": 204,
+      "name": "Magnetic Dipole (North)",
+      "symbol": "M↑",
+      "color": [255, 100, 100],
+      "state": "field",
+      "magnetic_moment_a_m2": 1.0,
+      "polarity": "north",
+      "update": "update_magnetic_dipole",
+      "ferromagnetic_response": true,
+      "description": "Северный полюс магнита. Притягивает южные полюса."
+    },
+    "205": {
+      "id": 205,
+      "name": "Magnetic Dipole (South)",
+      "symbol": "M↓",
+      "color": [100, 100, 255],
+      "state": "field",
+      "magnetic_moment_a_m2": 1.0,
+      "polarity": "south",
+      "update": "update_magnetic_dipole",
+      "ferromagnetic_response": true,
+      "description": "Южный полюс магнита. Притягивает северные полюса."
+    },
+    "206": {
+      "id": 206,
+      "name": "Plasma (Ionized Gas)",
+      "symbol": "Pl",
+      "color": [255, 150, 0],
+      "density": 0.001,
+      "state": "plasma",
+      "conductivity": 100,
+      "charge_carriers": ["e-", "ions"],
+      "magnetic_confinement": true,
+      "update": "update_plasma",
+      "description": "Ионизированный газ. Реагирует на электрические и магнитные поля."
+    },
+    "207": {
+      "id": 207,
+      "name": "Superfluid Helium",
+      "symbol": "He II",
+      "color": [200, 255, 255],
+      "density": 0.145,
+      "state": "liquid",
+      "viscosity_poise": 0,
+      "lambda_point_k": 2.17,
+      "creeping_flow": true,
+      "zero_entropy_flow": true,
+      "update": "update_superfluid",
+      "description": "Жидкий гелий при <2.17 K. Течёт без вязкости, поднимается по стенкам."
+    },
+    "208": {
+      "id": 208,
+      "name": "Non-Newtonian Fluid",
+      "symbol": "Oobleck",
+      "color": [180, 200, 100],
+      "density": 1.6,
+      "state": "gel",
+      "viscosity_poise": 1000,
+      "shear_thickening": true,
+      "yield_stress_pa": 50,
+      "update": "update_non_newtonian",
+      "description": "Жидкость, которая твердеет при ударе (например, кукурузный крахмал + вода)."
+    },
+    "209": {
+      "id": 209,
+      "name": "Surface Tension Agent",
+      "symbol": "Surf",
+      "color": [100, 200, 255],
+      "density": 1.0,
+      "state": "liquid",
+      "surface_tension_n_m": 0.01,
+      "capillary_rise_mm": 15,
+      "wetting_angle_deg": 30,
+      "update": "update_surface_tension",
+      "description": "Жидкость с высоким поверхностным натяжением. Формирует капли."
+    },
+    "210": {
+      "id": 210,
+      "name": "Acoustic Resonator",
+      "symbol": "Sound",
+      "color": [255, 200, 150],
+      "state": "field",
+      "frequency_hz": 440,
+      "amplitude_pa": 100,
+      "damping": 0.1,
+      "update": "update_acoustic_wave",
+      "description": "Источник звуковой волны. Может вызывать резонанс в других объектах."
+    },
+    "211": {
+      "id": 211,
+      "name": "Elastic Membrane",
+      "symbol": "Mem",
+      "color": [200, 200, 255],
+      "density": 0.5,
+      "state": "solid",
+      "young_modulus_mpa": 1.0,
+      "damping_ratio": 0.05,
+      "vibrates_under_sound": true,
+      "update": "update_elastic_membrane",
+      "description": "Тонкая мембрана. Вибрирует под действием звука или давления."
+    },
+    "212": {
+      "id": 212,
+      "name": "Quantum Dot",
+      "symbol": "QD",
+      "color": [0, 255, 100],
+      "size_nm": 5,
+      "state": "nanoparticle",
+      "band_gap_ev": 2.5,
+      "fluorescence_wavelength_nm": 500,
+      "quantum_confinement": true,
+      "update": "update_quantum_dot",
+      "description": "Наночастица, излучающая свет при возбуждении. Модель квантового эффекта."
+    },
+    "213": {
+      "id": 213,
+      "name": "Dark Matter (Simulated)",
+      "symbol": "DM",
+      "color": [50, 50, 50],
+      "density": 0.01,
+      "state": "exotic",
+      "interacts_via": ["gravity"],
+      "visible": false,
+      "update": "update_dark_matter",
+      "description": "Симуляция тёмной материи: создаёт гравитацию, но не видна."
+    },
+    "214": {
+      "id": 214,
+      "name": "Vortex Generator",
+      "symbol": "Vortex",
+      "color": [100, 100, 255],
+      "state": "field",
+      "angular_velocity_rad_s": 10,
+      "core_pressure_drop_pa": 1000,
+      "update": "update_vortex",
+      "description": "Создаёт водоворот в жидкости или газе. Может увлекать объекты."
+    },
+    "215": {
+      "id": 215,
+      "name": "Laser Beam",
+      "symbol": "L→",
+      "color": [255, 255, 0],
+      "state": "energy",
+      "wavelength_nm": 532,
+      "power_w": 1.0,
+      "coherent": true,
+      "update": "update_laser_beam",
+      "interaction_modes": ["reflection", "absorption", "scattering"],
+      "description": "Когерентный свет. Может нагревать, отражаться, фокусироваться."
+    },
+    "216": {
+      "id": 216,
+      "name": "Optical Lens",
+      "symbol": "Lens",
+      "color": [200, 230, 255],
+      "density": 2.5,
+      "state": "solid",
+      "refractive_index": 1.5,
+      "focal_length_px": 30,
+      "update": "update_lens",
+      "description": "Линза. Фокусирует или рассеивает лазерный луч."
+    },
+    "217": {
+      "id": 217,
+      "name": "Black Hole (Micro)",
+      "symbol": "BH",
+      "color": [0, 0, 0],
+      "state": "exotic",
+      "mass_kg": 1e12,
+      "schwarzschild_radius_px": 5,
+      "event_horizon_visible": true,
+      "update": "update_black_hole",
+      "description": "Микрочёрная дыра. Поглощает всё в радиусе. Создаёт сильное гравитационное поле."
+    }
+  },
+  "forces": {
+    "gravity": {
+      "formula": "F = G * m1 * m2 / r²",
+      "applies_to": ["mass"]
+    },
+    "coulomb": {
+      "formula": "F = k * q1 * q2 / r²",
+      "applies_to": ["charge"]
+    },
+    "lorentz": {
+      "formula": "F = q * (E + v × B)",
+      "applies_to": ["charged particles in EM field"]
+    },
+    "drag": {
+      "formula": "F = 0.5 * ρ * v² * Cd * A",
+      "applies_to": ["moving in fluid"]
+    },
+    "surface_tension": {
+      "formula": "F = γ * L",
+      "applies_to": ["liquid interfaces"]
+    },
+    "elastic_restoring": {
+      "formula": "F = -k * x",
+      "applies_to": ["springs, rubber"]
+    }
+  },
+  "effects": {
+    "doppler_shift": {
+      "enabled": true,
+      "applies_to": ["sound", "light"],
+      "description": "Частота волны меняется при движении источника или наблюдателя."
+    },
+    "bernoulli_effect": {
+      "enabled": true,
+      "applies_to": ["fluids"],
+      "description": "Давление падает при увеличении скорости потока. Подъёмная сила крыла."
+    },
+    "capillary_action": {
+      "enabled": true,
+      "max_height_mm": 50,
+      "depends_on": ["tube_diameter", "surface_tension"],
+      "description": "Жидкость поднимается в узких трубках против гравитации."
+    },
+    "turbulence": {
+      "enabled": true,
+      "reynolds_threshold": 2000,
+      "chaotic_flow": true,
+      "description": "При высоких скоростях поток становится нестабильным и вихревым."
+    }
+  }
+}
