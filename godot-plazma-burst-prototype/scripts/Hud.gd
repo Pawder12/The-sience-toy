@@ -6,7 +6,7 @@ var status_label: Label
 var objective_label: Label
 
 
-func _ready() -> void:
+func _init() -> void:
 	health_label = Label.new()
 	health_label.position = Vector2(24.0, 18.0)
 	health_label.add_theme_font_size_override("font_size", 24)
