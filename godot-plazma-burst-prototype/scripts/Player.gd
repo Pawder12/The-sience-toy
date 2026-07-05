@@ -4,7 +4,7 @@ class_name Player
 signal health_changed(current: int, maximum: int)
 signal died
 
-const BulletScene := preload("res://scripts/Bullet.gd")
+const BulletScene = preload("res://scripts/Bullet.gd")
 
 @export var move_speed: float = 350.0
 @export var jump_velocity: float = -620.0

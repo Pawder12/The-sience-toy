@@ -1,8 +1,8 @@
 extends Node2D
 
-const PlayerScene := preload("res://scripts/Player.gd")
-const EnemyScene := preload("res://scripts/Enemy.gd")
-const HudScene := preload("res://scripts/Hud.gd")
+const PlayerScene = preload("res://scripts/Player.gd")
+const EnemyScene = preload("res://scripts/Enemy.gd")
+const HudScene = preload("res://scripts/Hud.gd")
 
 var player: Player
 var hud: Hud

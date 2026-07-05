@@ -3,7 +3,7 @@ class_name Enemy
 
 signal died(enemy: Enemy)
 
-const BulletScene := preload("res://scripts/Bullet.gd")
+const BulletScene = preload("res://scripts/Bullet.gd")
 
 @export var move_speed: float = 170.0
 @export var gravity: float = 1500.0
